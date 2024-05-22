@@ -13,3 +13,10 @@ https://plost.streamlit.app/
 
 // lancer le projet 
 streamlit run streamlit_app.py
+
+
+// ici y'a des components de fou je crois bien 
+https://streamlit.io/components?category=widgets
+
+https://arnaudmiribel.github.io/streamlit-extras/extras/grid/
+
