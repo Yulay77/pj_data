@@ -1,0 +1,10 @@
+pip install streamlit
+//streamlit hello (ca te montre une démo et tu verras la doc etc)
+
+
+pip install plost
+// c'est pour les charts 
+https://plost.streamlit.app/
+
+// lancer le projet 
+streamlit run streamlit_app.py
