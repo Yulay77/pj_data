@@ -19,6 +19,12 @@ st.sidebar.subheader('Line chart parameters')
 plot_data = st.sidebar.multiselect('Select data', ['temp_min', 'temp_max'], ['temp_min', 'temp_max'])
 plot_height = st.sidebar.slider('Specify plot height', 200, 500, 250)
 
+# Row C
+seattle_weather = pd.read_csv('https://raw.githubusercontent.com/tvst/plost/master/data/seattle-weather.csv', parse_dates=['date'])
+stocks = pd.read_csv('https://raw.githubusercontent.com/dataprofessor/data/master/stocks_toy.csv')
+
+st.markdown('### Line chart')
+st.line_chart(seattle_weather, x = 'date', y = plot_data, height = plot_height)
 
 
 # Row A
@@ -29,9 +35,6 @@ col2.metric("Wind", "9 mph", "-8%")
 col3.metric("Humidity", "86%", "4%")
 
 # Row B
-seattle_weather = pd.read_csv('https://raw.githubusercontent.com/tvst/plost/master/data/seattle-weather.csv', parse_dates=['date'])
-stocks = pd.read_csv('https://raw.githubusercontent.com/dataprofessor/data/master/stocks_toy.csv')
-
 c1, c2 = st.columns((7,3))
 with c1:
     st.markdown('### Heatmap')
@@ -54,9 +57,6 @@ with c2:
         legend='bottom', 
         use_container_width=True)
 
-# Row C
-st.markdown('### Line chart')
-st.line_chart(seattle_weather, x = 'date', y = plot_data, height = plot_height)
 
 
 

@@ -1,9 +1,14 @@
+//Créer l'environnement de dev : 
+https://docs.streamlit.io/get-started/installation/command-line
+
+//Pour installer streamlit
 pip install streamlit
-//streamlit hello (ca te montre une démo et tu verras la doc etc)
 
+//voir si ca marche 
+streamlit hello (ca te montre une démo et tu verras la doc etc)
 
+// lib pour les charts 
 pip install plost
-// c'est pour les charts 
 https://plost.streamlit.app/
 
 // lancer le projet 
