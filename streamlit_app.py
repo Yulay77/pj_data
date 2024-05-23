@@ -7,6 +7,8 @@ from streamlit_extras.row import row
 
 st.set_page_config(layout="wide", page_title="Simulateur Engie")
 
+st.image('static/logo_engie.png')
+
 """## Faire une simulation pour un projet """
 
 with open('style.css') as f:
