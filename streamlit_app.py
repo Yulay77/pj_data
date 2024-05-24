@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plost
 import streamlit_extras
+import numpy as np
 from streamlit_extras.add_vertical_space import add_vertical_space
 from streamlit_extras.row import row
 from streamlit_extras.no_default_selectbox import selectbox
@@ -77,6 +78,18 @@ tarification = selectbox(
 )
 plot_time = st.slider('Spécifier la durée du projet en prod', 6, 30, 60)
 
+if tarification == "1 à 2 projets":
+    cout_fluid = 40000
+elif tarification == "3 à 5 projets":
+    cout_fluid = 35000
+elif tarification == "6 à 7 projets":
+    cout_fluid = 30000
+elif tarification == "Plus de 8 projets":
+    cout_fluid = 25000
+else:
+    cout_fluid = 0
+
+## Calculs PROD
 designer_prod_senior = nb_designer_senior_prod*int(55000)
 designer_prod_junior = nb_designer_junior_prod*int(40000)
 designer_prod = designer_prod_senior + designer_prod_junior
@@ -88,7 +101,47 @@ dev_prod = dev_prod_senior + dev_prod_junior
 cout_prod_annuel_sf = designer_prod + dev_prod
 cout_prod_mensuel_sf = cout_prod_annuel_sf/12
 
+cout_prod_annuel_af = cout_prod_annuel_sf+cout_fluid
+cout_prod_mensuel_af = cout_prod_annuel_af/12
 
+##Calculs MAINTENANCE
+
+designer_maintenance_senior = nb_designer_senior_maintenance*int(55000)
+designer_maintenance_junior = nb_designer_junior_maintenance*int(40000)
+designer_maintenance = designer_maintenance_senior + designer_maintenance_junior
+
+dev_maintenance_senior = nb_dev_senior_maintenance*int(60000)
+dev_maintenance_junior = nb_dev_junior_maintenance*int(42000)
+dev_maintenance = dev_maintenance_senior + dev_maintenance_junior
+
+cout_maintenance_annuel_sf = designer_maintenance + dev_maintenance
+cout_maintenance_mensuel_sf = cout_maintenance_annuel_sf/12
+
+cout_maintenance_annuel_af = cout_maintenance_annuel_sf
+cout_maintenance_mensuel_af = cout_maintenance_annuel_af/12
+## /!\ les cout af et sf sont les mêmes pour la maintenance
+
+# Create a sample dataframe
+data = {'Month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60],
+        'Avec Fluid': np.random.rand(60000),
+        'Sans Fluid': np.random.rand(60000)}
+df = pd.DataFrame(data)
+
+# Add a slider for the y-axis
+#min_cost, max_cost = st.slider("Select a range of costs", 0, 1, (0, 1))
+
+min_cost = 0
+max_cost = 50000
+
+# Filter the dataframe based on the selected range
+df_filtered = df[(df['Avec Fluid'] >= min_cost) & (df['Avec Fluid'] <= max_cost) &
+                 (df['Sans Fluid'] >= min_cost) & (df['Sans Fluid'] <= max_cost)]
+
+# Plot the line chart
+st.line_chart(df_filtered, x='Month', y=['Avec Fluid', 'Sans Fluid'])
+
+
+#st.line_chart(CSV A METTRE, x = plot_time+int(24), y = plot_data, height = plot_height)
 
 
 add_vertical_space(10)
