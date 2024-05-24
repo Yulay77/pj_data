@@ -77,6 +77,20 @@ tarification = selectbox(
 )
 plot_time = st.slider('Spécifier la durée du projet en prod', 6, 30, 60)
 
+designer_prod_senior = nb_designer_senior_prod*int(55000)
+designer_prod_junior = nb_designer_junior_prod*int(40000)
+designer_prod = designer_prod_senior + designer_prod_junior
+
+dev_prod_senior = nb_dev_senior_prod*int(60000)
+dev_prod_junior = nb_dev_junior_prod*int(42000)
+dev_prod = dev_prod_senior + dev_prod_junior
+
+cout_prod_annuel_sf = designer_prod + dev_prod
+cout_prod_mensuel_sf = cout_prod_annuel_sf/12
+
+
+
+
 add_vertical_space(10)
 
 # Row B
