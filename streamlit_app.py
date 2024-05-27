@@ -79,13 +79,11 @@ tarification = selectbox(
 plot_time = st.slider('Spécifier la durée du projet en prod', 6, 30, 60)
 
 if tarification == "1 à 2 projets":
-    cout_fluid = 40000
-elif tarification == "3 à 5 projets":
-    cout_fluid = 35000
-elif tarification == "6 à 7 projets":
-    cout_fluid = 30000
-elif tarification == "Plus de 8 projets":
-    cout_fluid = 25000
+    cout_fluid = 0.17
+elif tarification == "3 à 7 projets":
+    cout_fluid = 0.16
+elif tarification == "8 projets ou plus":
+    cout_fluid = 0.15
 else:
     cout_fluid = 0
 
@@ -101,7 +99,7 @@ dev_prod = dev_prod_senior + dev_prod_junior
 cout_prod_annuel_sf = designer_prod + dev_prod
 cout_prod_mensuel_sf = cout_prod_annuel_sf/12
 
-cout_prod_annuel_af = cout_prod_annuel_sf+cout_fluid
+cout_prod_annuel_af = cout_prod_annuel_sf
 cout_prod_mensuel_af = cout_prod_annuel_af/12
 
 ##Calculs MAINTENANCE
@@ -121,25 +119,40 @@ cout_maintenance_annuel_af = cout_maintenance_annuel_sf
 cout_maintenance_mensuel_af = cout_maintenance_annuel_af/12
 ## /!\ les cout af et sf sont les mêmes pour la maintenance
 
-# Create a sample dataframe
-data = {'Month': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60],
-        'Avec Fluid': np.random.rand(60000),
-        'Sans Fluid': np.random.rand(60000)}
-df = pd.DataFrame(data)
+## temps de maintenance = 2 ans = 24 mois fixes
+temps_maintenance = 24
+
+x_axis = np.arange(0, plot_time + temps_maintenance)
+
+costs_without_fluid = np.zeros(len(x_axis))
+
+# Add the monthly costs for production without Fluid
+for i in range(plot_time):
+    costs_without_fluid[i] = cout_prod_mensuel_sf
+
+# Add the monthly costs for maintenance without Fluid
+for i in range(plot_time, len(x_axis)):
+    costs_without_fluid[i] = cout_maintenance_mensuel_sf
+
+# Calculate the cumulative sum for the costs without Fluid
+costs_without_fluid = np.cumsum(costs_without_fluid)
+
+data = {'Avec Fluid': np.random.rand(len(x_axis)),
+        'Sans Fluid': costs_without_fluid}
+#[cout_prod_mensuel_sf] * plot_time + [cout_maintenance_mensuel_sf] * temps_maintenance
+
+df = pd.DataFrame(data, index=x_axis)
 
 # Add a slider for the y-axis
-#min_cost, max_cost = st.slider("Select a range of costs", 0, 1, (0, 1))
-
 min_cost = 0
-max_cost = 50000
+max_cost = 1000000
 
 # Filter the dataframe based on the selected range
-df_filtered = df[(df['Avec Fluid'] >= min_cost) & (df['Avec Fluid'] <= max_cost) &
-                 (df['Sans Fluid'] >= min_cost) & (df['Sans Fluid'] <= max_cost)]
+#df_filtered = df[(df['Avec Fluid'] >= min_cost) & (df['Avec Fluid'] <= max_cost) &
+#                 (df['Sans Fluid'] >= min_cost) & (df['Sans Fluid'] <= max_cost)]
 
 # Plot the line chart
-st.line_chart(df_filtered, x='Month', y=['Avec Fluid', 'Sans Fluid'])
-
+st.line_chart(data, use_container_width=True, y=['Avec Fluid', 'Sans Fluid'])
 
 #st.line_chart(CSV A METTRE, x = plot_time+int(24), y = plot_data, height = plot_height)
 

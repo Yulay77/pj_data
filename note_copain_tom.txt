@@ -21,4 +21,12 @@ https://streamlit.io/components?category=widgets
 https://arnaudmiribel.github.io/streamlit-extras/extras/grid/
 
 prompt : 
-Je fais un dashboard sur streamlit en python. J'ai besoin de faire un linechart. Mon linechart est divisé en 2 phases : la prod qui a une durée dynamique et la maintenance qui est fixe. Il y aurait en abscisse le temps en mois (dynamique pour la phase de prod) et en ordonnées le cout (qui est dynamique pour la prod et la maintenance). Il faut également savoir que j'ai besoin de comparer 2 lignes sur le même graph. La différence entre les 2 concerne uniquement les couts. Comment je peux faire ?
+Tu es entrain de développer un dashboard avec un line chart en python sur streamlit. 
+Ce line chart a pour but de comparer le cout d'un projet avec un outils vs sans cet outils. 
+Tu peux choisir avec un slider la durée du projet qui détermine l'abscisse du line chart. je pense qu'il faudrait créer un array en fonction du nombre de mois choisi dans le slider, comment tu ferais ? 
+
+
+A présent, je souhaite pour la courbe 'sans fluid' : 
+1/ avoir un cout pour le 1er mois composé du cout d'un outils + des ressource humaine
+2/ Mettre un cout par mois de ressource humaine pendant le temps sélectionné par le slider 
+3/ Mettre un cout par mois de ressource humaine pendant 24 mois
