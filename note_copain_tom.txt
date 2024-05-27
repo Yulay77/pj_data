@@ -30,3 +30,18 @@ A présent, je souhaite pour la courbe 'sans fluid' :
 1/ avoir un cout pour le 1er mois composé du cout d'un outils + des ressource humaine
 2/ Mettre un cout par mois de ressource humaine pendant le temps sélectionné par le slider 
 3/ Mettre un cout par mois de ressource humaine pendant 24 mois
+
+Voici comment je souhaite structurer la ligne "avec fluid" : 
+1/ avec une seule valeure pour le 1er mois : cout_prod_mensuel_af + cout_fluid_fix
+
+2/ le temps du reste de la durée de la prod : cout_prod_mensuel_af/mois
+
+3/ le temps de la maintenance : cout_maintenance_mensuel_af/mois 
+
+
+FAIRE FLUCTUER PAR LE TEMPS, LE NB DE PJ(ok), le cout de pj estimé, 
+
+RESTE A FAIRE :
+- faire marcher la ligne AF
+- faire fluctuer par le temps
+- faire fluctuer par le cout de pj estimé ? 

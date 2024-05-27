@@ -76,7 +76,7 @@ tarification = selectbox(
     ["1 à 2 projets", "3 à 7 projets", "8 projets ou plus"],
     no_selection_label="...",
 )
-plot_time = st.slider('Spécifier la durée du projet en prod', 6, 30, 60)
+temps_prod = st.slider('Spécifier la durée du projet en prod', 6, 30, 60)
 
 if tarification == "1 à 2 projets":
     cout_fluid = 0.17
@@ -87,7 +87,9 @@ elif tarification == "8 projets ou plus":
 else:
     cout_fluid = 0
 
-cout_pj_estime = st.number_input('Coût du projet estimé', value=1000000)
+#cout_pj_estime = st.number_input('Coût du projet estimé')
+
+## Calculs cout fluid total 
 
 ## Calculs PROD
 designer_prod_senior = nb_designer_senior_prod*int(55000)
@@ -101,7 +103,7 @@ dev_prod = dev_prod_senior + dev_prod_junior
 cout_prod_annuel_sf = designer_prod + dev_prod
 cout_prod_mensuel_sf = cout_prod_annuel_sf/12
 
-cout_prod_annuel_af = cout_prod_annuel_sf
+cout_prod_annuel_af = cout_prod_annuel_sf * 0.66
 cout_prod_mensuel_af = cout_prod_annuel_af/12
 
 ##Calculs MAINTENANCE
@@ -117,52 +119,66 @@ dev_maintenance = dev_maintenance_senior + dev_maintenance_junior
 cout_maintenance_annuel_sf = designer_maintenance + dev_maintenance
 cout_maintenance_mensuel_sf = cout_maintenance_annuel_sf/12
 
-cout_maintenance_annuel_af = cout_maintenance_annuel_sf
+cout_maintenance_annuel_af = cout_maintenance_annuel_sf * 0.66
 cout_maintenance_mensuel_af = cout_maintenance_annuel_af/12
 ## /!\ les cout af et sf sont les mêmes pour la maintenance
 
-## Calculs cout fluid total 
-
-cout_fluid_fix = cout_pj_estime * cout_fluid
+#cout_fluid_fix = cout_pj_estime * cout_fluid
+cout_fluid_fix = (cout_maintenance_annuel_sf + cout_prod_annuel_sf) * cout_fluid
 st.write(cout_fluid_fix)
 
 ## temps de maintenance = 2 ans = 24 mois fixes
 temps_maintenance = 24
 
-x_axis = np.arange(0, plot_time + temps_maintenance)
+x_axis = np.arange(0, temps_prod + temps_maintenance)
 
+## POUR SANS FLUID
 costs_without_fluid = np.zeros(len(x_axis))
 
 # Add the monthly costs for production without Fluid
-for i in range(plot_time):
+for i in range(temps_prod):
     costs_without_fluid[i] = cout_prod_mensuel_sf
 
 # Add the monthly costs for maintenance without Fluid
-for i in range(plot_time, len(x_axis)):
+for i in range(temps_prod, len(x_axis)):
     costs_without_fluid[i] = cout_maintenance_mensuel_sf
 
 # Calculate the cumulative sum for the costs without Fluid
 costs_without_fluid = np.cumsum(costs_without_fluid)
 
-data = {'Avec Fluid': np.random.rand(len(x_axis)),
+##POUR AVEC FLUID
+costs_with_fluid = np.zeros(len(x_axis))
+
+# Add the monthly costs for maintenance with Fluid
+for i in range(temps_prod):
+    costs_with_fluid[i] = cout_prod_mensuel_af
+
+# AddM the monthly costs for maintenance with Fluid
+for i in range(temps_prod, len(x_axis)):
+    costs_with_fluid[i] = cout_maintenance_mensuel_af
+
+# Correct the costs_with_fluid array for the first month
+costs_with_fluid[0] = cout_prod_mensuel_af + cout_fluid_fix
+
+# Calculate the cumulative sum for the costs with Fluid
+costs_with_fluid = np.cumsum(costs_with_fluid)
+
+data = {'Avec Fluid': costs_with_fluid,
         'Sans Fluid': costs_without_fluid}
-#[cout_prod_mensuel_sf] * plot_time + [cout_maintenance_mensuel_sf] * temps_maintenance
 
 df = pd.DataFrame(data, index=x_axis)
 
+st.line_chart(data, use_container_width=True, y=['Avec Fluid', 'Sans Fluid'])
+
 # Add a slider for the y-axis
-min_cost = 0
-max_cost = 1000000
+#min_cost = 0
+#max_cost = 1000000
 
 # Filter the dataframe based on the selected range
 #df_filtered = df[(df['Avec Fluid'] >= min_cost) & (df['Avec Fluid'] <= max_cost) &
 #                 (df['Sans Fluid'] >= min_cost) & (df['Sans Fluid'] <= max_cost)]
 
 # Plot the line chart
-st.line_chart(data, use_container_width=True, y=['Avec Fluid', 'Sans Fluid'])
-
-#st.line_chart(CSV A METTRE, x = plot_time+int(24), y = plot_data, height = plot_height)
-
 
 add_vertical_space(10)
 
