@@ -73,7 +73,7 @@ with col2:
     
 tarification = selectbox(
     "Choisir la tarification en fonction du nombre de projets utilisant Fluid dans la BU",
-    ["1 à 2 projets", "3 à 5 projets", "6 à 7 projets", "Plus de 8 projets"],
+    ["1 à 2 projets", "3 à 7 projets", "8 projets ou plus"],
     no_selection_label="...",
 )
 plot_time = st.slider('Spécifier la durée du projet en prod', 6, 30, 60)
@@ -86,6 +86,8 @@ elif tarification == "8 projets ou plus":
     cout_fluid = 0.15
 else:
     cout_fluid = 0
+
+cout_pj_estime = st.number_input('Coût du projet estimé', value=1000000)
 
 ## Calculs PROD
 designer_prod_senior = nb_designer_senior_prod*int(55000)
@@ -118,6 +120,11 @@ cout_maintenance_mensuel_sf = cout_maintenance_annuel_sf/12
 cout_maintenance_annuel_af = cout_maintenance_annuel_sf
 cout_maintenance_mensuel_af = cout_maintenance_annuel_af/12
 ## /!\ les cout af et sf sont les mêmes pour la maintenance
+
+## Calculs cout fluid total 
+
+cout_fluid_fix = cout_pj_estime * cout_fluid
+st.write(cout_fluid_fix)
 
 ## temps de maintenance = 2 ans = 24 mois fixes
 temps_maintenance = 24
