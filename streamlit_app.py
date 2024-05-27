@@ -87,10 +87,6 @@ elif tarification == "8 projets ou plus":
 else:
     cout_fluid = 0
 
-#cout_pj_estime = st.number_input('Coût du projet estimé')
-
-## Calculs cout fluid total 
-
 ## Calculs PROD
 designer_prod_senior = nb_designer_senior_prod*int(55000)
 designer_prod_junior = nb_designer_junior_prod*int(40000)
@@ -103,7 +99,7 @@ dev_prod = dev_prod_senior + dev_prod_junior
 cout_prod_annuel_sf = designer_prod + dev_prod
 cout_prod_mensuel_sf = cout_prod_annuel_sf/12
 
-cout_prod_annuel_af = cout_prod_annuel_sf * 0.66
+cout_prod_annuel_af = cout_prod_annuel_sf
 cout_prod_mensuel_af = cout_prod_annuel_af/12
 
 ##Calculs MAINTENANCE
@@ -123,7 +119,7 @@ cout_maintenance_annuel_af = cout_maintenance_annuel_sf * 0.66
 cout_maintenance_mensuel_af = cout_maintenance_annuel_af/12
 ## /!\ les cout af et sf sont les mêmes pour la maintenance
 
-#cout_fluid_fix = cout_pj_estime * cout_fluid
+# COUT FLUID FIXE
 cout_fluid_fix = (cout_maintenance_annuel_sf + cout_prod_annuel_sf) * cout_fluid
 st.write(cout_fluid_fix)
 
@@ -147,14 +143,17 @@ for i in range(temps_prod, len(x_axis)):
 costs_without_fluid = np.cumsum(costs_without_fluid)
 
 ##POUR AVEC FLUID
+temps_prod_af = int(temps_prod * 0.66)
+temps_maintenance_af = 24 + temps_prod * 0.34
+
 costs_with_fluid = np.zeros(len(x_axis))
 
 # Add the monthly costs for maintenance with Fluid
-for i in range(temps_prod):
+for i in range(temps_prod_af):
     costs_with_fluid[i] = cout_prod_mensuel_af
 
 # AddM the monthly costs for maintenance with Fluid
-for i in range(temps_prod, len(x_axis)):
+for i in range(temps_prod_af, len(x_axis)):
     costs_with_fluid[i] = cout_maintenance_mensuel_af
 
 # Correct the costs_with_fluid array for the first month
