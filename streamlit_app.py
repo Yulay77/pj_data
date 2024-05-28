@@ -3,8 +3,6 @@ import pandas as pd
 import plost
 import streamlit_extras
 import numpy as np
-from streamlit_extras.add_vertical_space import add_vertical_space
-from streamlit_extras.row import row
 from streamlit_extras.no_default_selectbox import selectbox
 
 st.set_page_config(layout="wide", page_title="Simulateur Engie")
