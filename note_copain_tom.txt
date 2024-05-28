@@ -14,6 +14,9 @@ https://plost.streamlit.app/
 // lancer le projet 
 streamlit run streamlit_app.py
 
+// Faire attention à ajouter tous les packages en haut de la page streamlit_app.py
+
+
 
 // ici y'a des components de fou je crois bien 
 https://streamlit.io/components?category=widgets

@@ -16,7 +16,6 @@ st.image('static/logo_engie.png')
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-#Row A
 st.subheader('Simulation du projet')
 st.text_input('Nom du projet')
 col1, col2 = st.columns(2)
@@ -24,57 +23,57 @@ col1, col2 = st.columns(2)
 with col1:
     nb_designer_senior_prod = selectbox(
         "Nombre de designer sénior en prod",
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        no_selection_label="...",
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 
+        no_selection_label="---"
     )
 
     nb_designer_junior_prod = selectbox(
         "Nombre de designer junior en prod",
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        no_selection_label="...",
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 
+        no_selection_label="---"
     )
 
     nb_dev_senior_prod = selectbox(
         "Nombre de développeur sénior en prod",
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        no_selection_label="...",
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        no_selection_label="---"
     )
 
     nb_dev_junior_prod = selectbox(
         "Nombre de développeur junior en prod",
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        no_selection_label="...",
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 
+        no_selection_label="---"
     )
 
 with col2:
     nb_designer_senior_maintenance = selectbox(
         "Nombre de designer sénior en maintenance",
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        no_selection_label="...",
-    )
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        no_selection_label="---"
+   )
 
     nb_designer_junior_maintenance = selectbox(
         "Nombre de designer junior en maintenance",
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        no_selection_label="...",
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 
+        no_selection_label="---"
     )
 
     nb_dev_senior_maintenance = selectbox(
         "Nombre de développeur sénior en maintenance",
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        no_selection_label="...",
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 
+        no_selection_label="---"
     )
 
     nb_dev_junior_maintenance = selectbox(
         "Nombre de développeur junior en maintenance",
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        no_selection_label="...",
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        no_selection_label="---"
     )
     
 tarification = selectbox(
     "Choisir la tarification en fonction du nombre de projets utilisant Fluid dans la BU",
     ["1 à 2 projets", "3 à 7 projets", "8 projets ou plus"],
-    no_selection_label="...",
+    no_selection_label="---"
 )
 temps_prod = st.slider('Spécifier la durée du projet en prod', 6, 30, 60)
 
@@ -102,8 +101,7 @@ cout_prod_mensuel_sf = cout_prod_annuel_sf/12
 cout_prod_annuel_af = cout_prod_annuel_sf
 cout_prod_mensuel_af = cout_prod_annuel_af/12
 
-##Calculs MAINTENANCE
-
+## Calculs MAINTENANCE
 designer_maintenance_senior = nb_designer_senior_maintenance*int(55000)
 designer_maintenance_junior = nb_designer_junior_maintenance*int(40000)
 designer_maintenance = designer_maintenance_senior + designer_maintenance_junior
@@ -117,13 +115,11 @@ cout_maintenance_mensuel_sf = cout_maintenance_annuel_sf/12
 
 cout_maintenance_annuel_af = cout_maintenance_annuel_sf * 0.66
 cout_maintenance_mensuel_af = cout_maintenance_annuel_af/12
-## /!\ les cout af et sf sont les mêmes pour la maintenance
 
 # COUT FLUID FIXE
 cout_fluid_fix = (cout_maintenance_annuel_sf + cout_prod_annuel_sf) * cout_fluid
-st.write(cout_fluid_fix)
 
-## temps de maintenance = 2 ans = 24 mois fixes
+## Temps de maintenance = 2 ans = 24 mois fixes
 temps_maintenance = 24
 
 x_axis = np.arange(0, temps_prod + temps_maintenance)
@@ -131,35 +127,35 @@ x_axis = np.arange(0, temps_prod + temps_maintenance)
 ## POUR SANS FLUID
 costs_without_fluid = np.zeros(len(x_axis))
 
-# Add the monthly costs for production without Fluid
+# Ajout des coûts mensuel de production sans Fluid
 for i in range(temps_prod):
     costs_without_fluid[i] = cout_prod_mensuel_sf
 
-# Add the monthly costs for maintenance without Fluid
+# Ajout des coûts mensuel de maintenance sans Fluid
 for i in range(temps_prod, len(x_axis)):
     costs_without_fluid[i] = cout_maintenance_mensuel_sf
 
-# Calculate the cumulative sum for the costs without Fluid
+# Calcul des coûts cumulés sans Fluid
 costs_without_fluid = np.cumsum(costs_without_fluid)
 
-##POUR AVEC FLUID
+## POUR AVEC FLUID
 temps_prod_af = int(temps_prod * 0.66)
 temps_maintenance_af = 24 + temps_prod * 0.34
 
 costs_with_fluid = np.zeros(len(x_axis))
 
-# Add the monthly costs for maintenance with Fluid
+# Ajout des coûts mensuel de production avec Fluid
 for i in range(temps_prod_af):
     costs_with_fluid[i] = cout_prod_mensuel_af
 
-# AddM the monthly costs for maintenance with Fluid
+# Ajout des coûts mensuel de maintenance avec Fluid
 for i in range(temps_prod_af, len(x_axis)):
     costs_with_fluid[i] = cout_maintenance_mensuel_af
 
-# Correct the costs_with_fluid array for the first month
+# Ajustement du premier mois Avec cout fluid fixe
 costs_with_fluid[0] = cout_prod_mensuel_af + cout_fluid_fix
 
-# Calculate the cumulative sum for the costs with Fluid
+# Calcul des coûts cumulés avec Fluid
 costs_with_fluid = np.cumsum(costs_with_fluid)
 
 data = {'Avec Fluid': costs_with_fluid,
@@ -168,67 +164,6 @@ data = {'Avec Fluid': costs_with_fluid,
 df = pd.DataFrame(data, index=x_axis)
 
 st.line_chart(data, use_container_width=True, y=['Avec Fluid', 'Sans Fluid'])
-
-# Add a slider for the y-axis
-#min_cost = 0
-#max_cost = 1000000
-
-# Filter the dataframe based on the selected range
-#df_filtered = df[(df['Avec Fluid'] >= min_cost) & (df['Avec Fluid'] <= max_cost) &
-#                 (df['Sans Fluid'] >= min_cost) & (df['Sans Fluid'] <= max_cost)]
-
-# Plot the line chart
-
-add_vertical_space(10)
-
-# Row B
-seattle_weather = pd.read_csv('https://raw.githubusercontent.com/tvst/plost/master/data/seattle-weather.csv', parse_dates=['date'])
-stocks = pd.read_csv('https://raw.githubusercontent.com/dataprofessor/data/master/stocks_toy.csv')
-
-time_hist_color = st.selectbox('Color by', ('temp_min', 'temp_max')) 
-
-st.markdown('Donut chart parameter')
-donut_theta = st.selectbox('Select data', ('q2', 'q3'))
-
-st.markdown('Line chart parameters')
-plot_data = st.multiselect('Avec et sans Fluid', ['temp_min', 'temp_max'], ['temp_min', 'temp_max'])
-plot_height = st.slider('Specify plot height', 200, 500, 250)
-
-
-st.line_chart(seattle_weather, x = 'date', y = plot_data, height = plot_height)
-
-add_vertical_space(15)
-
-# Row C
-st.markdown('### Metrics')
-col1, col2, col3 = st.columns(3)
-col1.metric("Temperature", "70 °F", "1.2 °F")
-col2.metric("Wind", "9 mph", "-8%")
-col3.metric("Humidity", "86%", "4%")
-
-# Row D
-c1, c2 = st.columns((7,3))
-with c1:
-    st.markdown('### Heatmap')
-    plost.time_hist(
-    data=seattle_weather,
-    date='date',
-    x_unit='week',
-    y_unit='day',
-    color=time_hist_color,
-    aggregate='median',
-    legend=None,
-    height=345,
-    use_container_width=True)
-with c2:
-    st.markdown('### Donut chart')
-    plost.donut_chart(
-        data=stocks,
-        theta=donut_theta,
-        color='company',
-        legend='bottom', 
-        use_container_width=True)
-
 
 
 
