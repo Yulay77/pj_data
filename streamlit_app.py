@@ -142,7 +142,7 @@ temps_run_phase_af = 24 + temps_build_phase * 0.34
 
 costs_with_fluid = np.zeros(len(x_axis))
 
-# Ajout des coûts mensuel de build_phaseuction avec Fluid
+# Ajout des coûts mensuel de build_phase avec Fluid
 for i in range(temps_build_phase_af):
     costs_with_fluid[i] = cout_build_phase_mensuel_af
 
@@ -163,7 +163,9 @@ df = pd.DataFrame(data, index=x_axis)
 
 st.line_chart(data, use_container_width=True, y=['Avec Fluid', 'Sans Fluid'])
 
-st.write(df.round(0))
+st.write(f"Avec Fluid : votre build phase se termine en {int(temps_build_phase_af)} mois et à {int(temps_build_phase+temps_run_phase)} mois de projet, vous avez dépensé {int(costs_with_fluid[-1])} €")
+st.write(f"Sans Fluid : votre build phase se termine en {int(temps_build_phase)} mois et à {int(temps_build_phase+temps_run_phase)} mois de projet, vous avez dépensé {int(costs_without_fluid[-1])} €")
+st.write(f"Fluid vous permettrait d'économiser {int(costs_without_fluid[-1]-costs_with_fluid[-1])} €")
 
 
 
