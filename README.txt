@@ -4,6 +4,8 @@ https://docs.streamlit.io/get-started/installation/command-line
 //Pour installer streamlit
 pip install streamlit
 
+.venv\Scripts\Activate.ps1  
+
 //voir si ca marche 
 streamlit hello (ca te montre une démo et tu verras la doc etc)
 
